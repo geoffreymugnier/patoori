@@ -1,37 +1,52 @@
 <script>
-  import { format } from 'date-fns';
+  import { format } from "date-fns";
 
   let displayingFuture = false;
 
+  const daysOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
   const riceDays = ["Monday", "Tuesday", "Thursday"];
   const pastaDays = ["Wednesday", "Friday"];
 
+  const today = new Date();
+  const day = format(today, "EEEE");
+  const currentDayIndex = daysOrder.indexOf(day);
+
   const isRiceDay = () => {
-    const today = new Date().getDay();
-    const day = format(today, "EEEE")
     return riceDays.includes(day);
-  }
+  };
 
   const nextPastaDay = () => {
-    const today = new Date().getDay();
-    const day = format(today, "EEEE")
-    const nextDay = pastaDays.find(d => d > day);
-    return nextDay;
-  }
+    const nextPastaDay = pastaDays.find((pastaDay) => {
+      const pastaDayIndex = daysOrder.indexOf(pastaDay);
+      return pastaDayIndex > currentDayIndex;
+    });
+
+    if (!nextPastaDay) {
+      return pastaDays[0];
+    }
+
+    return nextPastaDay;
+  };
 
   const nextRiceDay = () => {
-    const today = new Date().getDay();
-    const day = format(today, "EEEE")
-    const nextDay = riceDays.find(d => d > day);
-    return nextDay;
-  }
+    const nextRiceDay = riceDays.find((riceDay) => {
+      const riceDayIndex = daysOrder.indexOf(riceDay);
+      return riceDayIndex > currentDayIndex;
+    });
+
+    if (!nextRiceDay) {
+      return pastaDays[0];
+    }
+
+    return nextRiceDay;
+  };
 
   const handleDisplayFuture = () => {
     displayingFuture = true;
     setTimeout(() => {
       displayingFuture = false;
     }, 3000);
-  }
+  };
 </script>
 
 <nav>Patoori</nav>
@@ -39,6 +54,8 @@
   <h1>It's 🍚🐷 day!</h1>
   {#if displayingFuture}
     <p>It will be on <b>{nextPastaDay()}</b></p>
+  {:else if day == "Friday"}
+    <p>Have a nice weekend !</p>
   {:else}
     <button on:click={handleDisplayFuture}>When's next 🍝 ?</button>
   {/if}
@@ -46,6 +63,8 @@
   <h1>It's 🍝 day!</h1>
   {#if displayingFuture}
     <p>It will be on <b>{nextRiceDay()}</b></p>
+  {:else if day == "Friday"}
+    <p>Have a nice weekend !</p>
   {:else}
     <button on:click={handleDisplayFuture}>When's next 🍚🐷 ?</button>
   {/if}

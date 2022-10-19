@@ -35,7 +35,7 @@
     });
 
     if (!nextRiceDay) {
-      return pastaDays[0];
+      return riceDays[0];
     }
 
     return nextRiceDay;
@@ -54,8 +54,6 @@
   <h1>It's 🍚🐷 day!</h1>
   {#if displayingFuture}
     <p>It will be on <b>{nextPastaDay()}</b></p>
-  {:else if day == "Friday"}
-    <p>Have a nice weekend !</p>
   {:else}
     <button on:click={handleDisplayFuture}>When's next 🍝 ?</button>
   {/if}
@@ -63,11 +61,13 @@
   <h1>It's 🍝 day!</h1>
   {#if displayingFuture}
     <p>It will be on <b>{nextRiceDay()}</b></p>
-  {:else if day == "Friday"}
-    <p>Have a nice weekend !</p>
   {:else}
     <button on:click={handleDisplayFuture}>When's next 🍚🐷 ?</button>
   {/if}
+{/if}
+
+{#if day == "Friday"}
+  <p>Have a nice weekend !</p>
 {/if}
 
 <style>
